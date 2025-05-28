@@ -16,6 +16,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.JTextField;
 
 /**
  * Aplicación de ventanas con una única ventana principal y una caja de texto
@@ -44,6 +45,7 @@ public class VentanaVisorBase {
 	private JButton botónCancelar;
 	/** El botón de cancelar. */
 	private JButton botónAceptar;
+	private JTextField textoErrores;
 
 	/**
 	 * Lanza la aplicación. Establece la apariencia general de la ventana y registra
@@ -169,15 +171,27 @@ public class VentanaVisorBase {
 		if (panelBotones == null) {
 			panelBotones = new JPanel();
 			GroupLayout gl_panelBotones = new GroupLayout(panelBotones);
-			gl_panelBotones.setHorizontalGroup(gl_panelBotones.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelBotones.createSequentialGroup().addContainerGap(268, Short.MAX_VALUE)
-							.addComponent(getBotónCancelar()).addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(getBotónAceptar()).addContainerGap()));
-			gl_panelBotones.setVerticalGroup(gl_panelBotones.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelBotones.createSequentialGroup().addContainerGap(14, Short.MAX_VALUE)
-							.addGroup(gl_panelBotones.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getBotónAceptar()).addComponent(getBotónCancelar()))
-							.addContainerGap()));
+			gl_panelBotones.setHorizontalGroup(
+				gl_panelBotones.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelBotones.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(getTextoErrores(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
+						.addComponent(getBotónCancelar())
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(getBotónAceptar())
+						.addContainerGap())
+			);
+			gl_panelBotones.setVerticalGroup(
+				gl_panelBotones.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelBotones.createSequentialGroup()
+						.addContainerGap(14, Short.MAX_VALUE)
+						.addGroup(gl_panelBotones.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getBotónAceptar())
+							.addComponent(getBotónCancelar())
+							.addComponent(getTextoErrores(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap())
+			);
 			panelBotones.setLayout(gl_panelBotones);
 		}
 		return panelBotones;
@@ -209,5 +223,45 @@ public class VentanaVisorBase {
 			botónAceptar.setMnemonic(KeyEvent.VK_A);
 		}
 		return botónAceptar;
+	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– el área de texto para
+	 * mostrar información del estado.
+	 * 
+	 * @return el área de texto indicada
+	 */
+	private JTextField getTextoErrores() {
+		if (textoErrores == null) {
+			textoErrores = new JTextField();
+			textoErrores.setEnabled(false);
+			textoErrores.setEditable(false);
+			textoErrores.setColumns(10);
+		}
+		return textoErrores;
+	}
+	
+	/**
+	 * Muestra un mensaje de texto en color rojo para diferenciarlo.
+	 * 
+	 * @param mensaje correspondiente
+	 */
+	public void mostrarAviso(String mensaje) {
+		JTextField out;
+		out = getTextoErrores();
+		out.setForeground(Color.RED);
+		out.setText(mensaje);
+	}
+	
+	/**
+	 * Muestra un mensaje de texto de infromación del estado de la aplicación.
+	 * 
+	 * @param mensaje correspondiente
+	 */
+	public void mostrarEstado(String mensaje) {
+		JTextField out;
+		out = getTextoErrores();
+		out.setForeground(Color.DARK_GRAY);
+		out.setText(mensaje);
 	}
 }
