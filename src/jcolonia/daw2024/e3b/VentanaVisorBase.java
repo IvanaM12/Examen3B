@@ -17,6 +17,11 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * Aplicación de ventanas con una única ventana principal y una caja de texto
@@ -46,6 +51,9 @@ public class VentanaVisorBase {
 	/** El botón de cancelar. */
 	private JButton botónAceptar;
 	private JTextField textoErrores;
+	private JMenuBar menuBar;
+	private JMenu menuAyuda;
+	private JMenuItem menuItemCreditos;
 
 	/**
 	 * Lanza la aplicación. Establece la apariencia general de la ventana y registra
@@ -81,6 +89,7 @@ public class VentanaVisorBase {
 		ventanaVisor.setBounds(100, 100, 450, 300);
 		ventanaVisor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventanaVisor.getContentPane().add(getPanelExterior(), BorderLayout.CENTER);
+		ventanaVisor.setJMenuBar(getMenuBar());
 	}
 
 	/**
@@ -175,7 +184,7 @@ public class VentanaVisorBase {
 				gl_panelBotones.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panelBotones.createSequentialGroup()
 						.addContainerGap()
-						.addComponent(getTextoErrores(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(getTextoEstado(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
 						.addComponent(getBotónCancelar())
 						.addPreferredGap(ComponentPlacement.RELATED)
@@ -189,7 +198,7 @@ public class VentanaVisorBase {
 						.addGroup(gl_panelBotones.createParallelGroup(Alignment.BASELINE)
 							.addComponent(getBotónAceptar())
 							.addComponent(getBotónCancelar())
-							.addComponent(getTextoErrores(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(getTextoEstado(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap())
 			);
 			panelBotones.setLayout(gl_panelBotones);
@@ -231,10 +240,9 @@ public class VentanaVisorBase {
 	 * 
 	 * @return el área de texto indicada
 	 */
-	private JTextField getTextoErrores() {
+	private JTextField getTextoEstado() {
 		if (textoErrores == null) {
 			textoErrores = new JTextField();
-			textoErrores.setEnabled(false);
 			textoErrores.setEditable(false);
 			textoErrores.setColumns(10);
 		}
@@ -248,7 +256,7 @@ public class VentanaVisorBase {
 	 */
 	public void mostrarAviso(String mensaje) {
 		JTextField out;
-		out = getTextoErrores();
+		out = getTextoEstado();
 		out.setForeground(Color.RED);
 		out.setText(mensaje);
 	}
@@ -260,8 +268,39 @@ public class VentanaVisorBase {
 	 */
 	public void mostrarEstado(String mensaje) {
 		JTextField out;
-		out = getTextoErrores();
+		out = getTextoEstado();
 		out.setForeground(Color.DARK_GRAY);
 		out.setText(mensaje);
+	}
+	private JMenuBar getMenuBar() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMenuAyuda());
+		}
+		return menuBar;
+	}
+	private JMenu getMenuAyuda() {
+		if (menuAyuda == null) {
+			menuAyuda = new JMenu("Ayuda");
+			menuAyuda.setMnemonic('A');
+			menuAyuda.add(getMenuItemCreditos());
+		}
+		return menuAyuda;
+	}
+	private JMenuItem getMenuItemCreditos() {
+		if (menuItemCreditos == null) {
+			menuItemCreditos = new JMenuItem("Créditos");
+			menuItemCreditos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JTextArea out;
+					out = getCajaTexto();
+					String info;
+					
+					info = String.format("Autor: Ivana Marcos%nFecha: 28/05/2025%nInventario del aula");
+					out.setText(info);
+				}
+			});
+		}
+		return menuItemCreditos;
 	}
 }
