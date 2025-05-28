@@ -50,10 +50,18 @@ public class VentanaVisorBase {
 	private JButton botónCancelar;
 	/** El botón de cancelar. */
 	private JButton botónAceptar;
-	private JTextField textoErrores;
+	/** El área de texto para el estado. */
+	private JTextField textoEstado;
+	/** La barra de menú. */
 	private JMenuBar menuBar;
+	/** El menú de ayuda.*/
 	private JMenu menuAyuda;
+	/** El apartado de los créditos. */
 	private JMenuItem menuItemCreditos;
+	/** El menú de archivo. */
+	private JMenu menuArchivo;
+	/** El apartado de salida del programa. */
+	private JMenuItem menuItemSalir;
 
 	/**
 	 * Lanza la aplicación. Establece la apariencia general de la ventana y registra
@@ -215,9 +223,17 @@ public class VentanaVisorBase {
 	private JButton getBotónCancelar() {
 		if (botónCancelar == null) {
 			botónCancelar = new JButton("Cancelar");
+			botónCancelar.addActionListener(e -> cerrarVentana());
 			botónCancelar.setMnemonic(KeyEvent.VK_C);
 		}
 		return botónCancelar;
+	}
+	
+	/**
+	 * Cierra la ventana principal.
+	 */
+	private void cerrarVentana() {
+		ventanaVisor.dispose();
 	}
 
 	/**
@@ -241,12 +257,12 @@ public class VentanaVisorBase {
 	 * @return el área de texto indicada
 	 */
 	private JTextField getTextoEstado() {
-		if (textoErrores == null) {
-			textoErrores = new JTextField();
-			textoErrores.setEditable(false);
-			textoErrores.setColumns(10);
+		if (textoEstado == null) {
+			textoEstado = new JTextField();
+			textoEstado.setEditable(false);
+			textoEstado.setColumns(10);
 		}
-		return textoErrores;
+		return textoEstado;
 	}
 	
 	/**
@@ -272,13 +288,28 @@ public class VentanaVisorBase {
 		out.setForeground(Color.DARK_GRAY);
 		out.setText(mensaje);
 	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– la barra de menú arriba
+	 * del todo.
+	 * 
+	 * @return el elemento correspondiente
+	 */
 	private JMenuBar getMenuBar() {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
 			menuBar.add(getMenuAyuda());
+			menuBar.add(getMenuArchivo());
 		}
 		return menuBar;
 	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– el menú de ayuda ubicado
+	 * en la barra de menú.
+	 * 
+	 * @return el elemento correspondiente
+	 */
 	private JMenu getMenuAyuda() {
 		if (menuAyuda == null) {
 			menuAyuda = new JMenu("Ayuda");
@@ -287,6 +318,13 @@ public class VentanaVisorBase {
 		}
 		return menuAyuda;
 	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– el elemento del menú de ayuda
+	 * que muestra los créditos del programa.
+	 * 
+	 * @return el elemento correspondiente
+	 */
 	private JMenuItem getMenuItemCreditos() {
 		if (menuItemCreditos == null) {
 			menuItemCreditos = new JMenuItem("Créditos");
@@ -302,5 +340,34 @@ public class VentanaVisorBase {
 			});
 		}
 		return menuItemCreditos;
+	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– el menú "Archivo" ubicado
+	 * en la barra de menú.
+	 * 
+	 * @return el elemento correspondiente
+	 */
+	private JMenu getMenuArchivo() {
+		if (menuArchivo == null) {
+			menuArchivo = new JMenu("Archivo");
+			menuArchivo.setMnemonic('A');
+			menuArchivo.add(getMenuItemSalir());
+		}
+		return menuArchivo;
+	}
+	
+	/**
+	 * Localiza –o inicializa si no se ha creado todavía– el elemento del menú "Archivo"
+	 * que cierra la ventana finalizando el programa.
+	 * 
+	 * @return el elemento correspondiente
+	 */
+	private JMenuItem getMenuItemSalir() {
+		if (menuItemSalir == null) {
+			menuItemSalir = new JMenuItem("Salir");
+			menuItemSalir.addActionListener(e -> cerrarVentana());
+		}
+		return menuItemSalir;
 	}
 }
