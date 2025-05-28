@@ -370,7 +370,7 @@ public class AccesoBD implements AutoCloseable {
 					VistaGeneral.mostrarTexto(mensaje);
 
 					abrirConexión();
-					// vaciarBD();
+					vaciarBD();
 					escribir(nuevaLista);
 				} else {
 					mensaje = String.format("%d equipos migrados, transferencia fallida", númElementos);
@@ -380,6 +380,19 @@ public class AccesoBD implements AutoCloseable {
 		} catch (InventarioException ex) {
 			mensaje = String.format("Error de importación: %s", ex.getLocalizedMessage());
 			VistaGeneral.mostrarAviso(mensaje);
+		}
+	}
+	
+	/**
+	 * Vacía y limpia la base de datos. Borra todos los elementos y compacta
+	 * el espacio de la base.
+	 */
+	private void vaciarBD() {
+		try {
+			sentenciaGeneralSQL.execute(SQL_VACIAR_TABLA);
+			sentenciaGeneralSQL.execute(SQL_COMPACTAR_ESPACIO);
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
 		}
 	}
 
